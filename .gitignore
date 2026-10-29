@@ -44,3 +44,7 @@ _tmp/remote_probe.log
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# ---- 临时推送脚本（每次由代理生成，不入库）----
+_tmp/*.cmd
+_tmp/*.ps1
