@@ -1,0 +1,6 @@
+编译：
+cd /workspaces/miniob
+./build.sh debug
+任务一：
+cd /root
+/workspaces/miniob/build_debug/bin/observer -f /workspaces/miniob/etc/observer.ini -P cli -d disk

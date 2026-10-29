@@ -1,0 +1,89 @@
+﻿
+=== apply-mirror start 2026-10-17T00:39:00 ===
+whoami: 青玉案-笙笙\24235
+daemon.json: C:\Users\24235\.docker\daemon.json
+--- old ---
+{
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": false
+}
+
+--- new ---
+{
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": false,
+  "registry-mirrors": ["https://docker.m.daocloud.io"]
+}
+
+restored settings-store.json from .bak (removed misplaced RegistryMirrors)
+set AutoStart=true (Docker Desktop 会在登录时自动启动)
+--- restart engine ---
+鉁?Starting Docker Desktop
+engine up: 29.8.2
+--- docker info: mirrors ---
+ Registry Mirrors:
+  https://docker.m.daocloud.io/
+
+--- pulling oceanbase/miniob via mirror (369 MB, 10~20 min) ---
+docker.exe : invalid reference format
+所在位置 C:\Users\24235\Desktop\databaseExperiment\_setup\apply-mirror.ps1:67 字符: 1
++ & $docker pull "$MIRROR/oceanbase/miniob:latest" 2>&1 | ForEach-Objec ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (invalid reference format:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+pull exit=1
+docker.exe : error parsing reference: "https://docker.m.daocloud.io/oceanbase/miniob:latest" is not a valid repository/
+tag: invalid reference format
+所在位置 C:\Users\24235\Desktop\databaseExperiment\_setup\apply-mirror.ps1:70 字符: 1
++ & $docker tag "$MIRROR/oceanbase/miniob:latest" 'oceanbase/miniob:lat ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error parsing r...eference format:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+tag exit=1
+
+--- images ---
+IMAGE                                       ID             DISK USAGE   CONTENT SIZE   EXTRA
+docker.m.daocloud.io/library/ubuntu:24.04   534baea6a22c        119MB         31.7MB        
+ubuntu:24.04                                534baea6a22c        119MB         31.7MB        
+--- smoke: toolchain inside the image ---
+docker.exe : Unable to find image 'oceanbase/miniob:latest' locally
+所在位置 C:\Users\24235\Desktop\databaseExperiment\_setup\apply-mirror.ps1:80 字符: 2
++ (& $docker run --rm --entrypoint bash 'oceanbase/miniob' -lc 'gcc --v ...
++  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Unable to find ...latest' locally:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+latest: Pulling from oceanbase/miniob
+4f4fb700ef54: Pulling fs layer
+9bece6cea27a: Pulling fs layer
+bab78a31ac2b: Pulling fs layer
+254cd897500f: Pulling fs layer
+1a1dd6b225c1: Pulling fs layer
+716c177c92d9: Pulling fs layer
+0622fac788ed: Pulling fs layer
+e31a617c08b4: Pulling fs layer
+701aa8785399: Pulling fs layer
+f07eb9fcc20d: Download complete
+4f4fb700ef54: Download complete
+e31a617c08b4: Download complete
+0622fac788ed: Download complete
+0622fac788ed: Pull complete
+1a1dd6b225c1: Download complete
+1a1dd6b225c1: Pull complete
+9bece6cea27a: Download complete
+701aa8785399: Download complete
+716c177c92d9: Download complete
+bab78a31ac2b: Download complete
+=== apply-mirror done 2026-10-17T00:58:52 ===

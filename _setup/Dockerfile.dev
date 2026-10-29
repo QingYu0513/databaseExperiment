@@ -1,0 +1,35 @@
+# MiniOB 开发镜像（本地构建版）
+#
+# 为什么不用官方 Dockerfile / oceanbase/miniob 镜像：
+#   1) 本机 Docker Hub 不可达，拉取 oceanbase/miniob 会**卡死**（实测 vhdx 75 秒零增长）；
+#   2) 官方 Dockerfile 里 `git clone https://github.com/oceanbase/miniob` + 子模块克隆
+#      在**容器内访问 github.com 会被拒绝**（curl/apt 正常，只有 github 不通）；
+#   3) 官方镜像基于 ubuntu:24.04，而我们已经有了这个基础镜像，apt 在容器内实测 2.3 MB/s，很快。
+#
+# 所以这里只装工具链，源码通过挂载提供（这正是 VS Code Dev Containers 的做法），
+# 并且把镜像打成 oceanbase/miniob:latest，使仓库里的 .devcontainer/devcontainer.json 不用改。
+FROM ubuntu:24.04
+
+ENV LANG=en_US.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends locales apt-utils ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+# 工具链：和仓库 docker/Dockerfile 一致，另加 libreadline-dev / pkg-config / python3
+# （python3 是跑官方 test/case/miniob_test.py 用的；官方镜像里其实没有）
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential gdb cmake git wget curl flex bison texinfo diffutils \
+        clang-format vim sudo pkg-config libreadline-dev python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# git 的 safe.directory：挂载进来的 Windows 目录属主常与容器内 root 不一致，
+# 否则 build.sh init 里 `git submodule update --init || return` 会静默失败
+RUN git config --global --add safe.directory '*'
+
+WORKDIR /workspaces
+
+CMD ["/bin/bash"]

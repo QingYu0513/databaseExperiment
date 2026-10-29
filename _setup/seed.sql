@@ -1,0 +1,18 @@
+create table class(id int, name char(20), teacher char(20));
+insert into class values(1,'class_1','zhang');
+insert into class values(2,'class_2','li');
+create table student(id int, name char(20), age int, class_id int);
+insert into student values(1,'xiaoming',18,1);
+insert into student values(2,'xiaohong',19,1);
+insert into student values(3,'xiaogang',20,2);
+insert into student values(4,'xiaomei',18,2);
+create table course(id int, name char(20), credit int);
+insert into course values(1,'database',4);
+insert into course values(2,'os',3);
+insert into course values(3,'compiler',3);
+create table score(student_id int, course_id int, score int);
+insert into score values(1,1,95);
+insert into score values(1,2,88);
+insert into score values(2,1,92);
+insert into score values(3,1,78);
+insert into score values(4,2,85);

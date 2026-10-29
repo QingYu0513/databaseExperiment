@@ -1,0 +1,42 @@
+﻿
+=== pull-miniob start 2026-10-17T00:40:13 ===
+--- confirm mirror is active ---
+ Registry Mirrors:
+  https://docker.m.daocloud.io/
+
+--- [1] docker pull oceanbase/miniob:latest  (via active mirror; 369 MB) ---
+latest: Pulling from oceanbase/miniob
+4f4fb700ef54: Pulling fs layer
+9bece6cea27a: Pulling fs layer
+e31a617c08b4: Pulling fs layer
+701aa8785399: Pulling fs layer
+716c177c92d9: Pulling fs layer
+254cd897500f: Pulling fs layer
+bab78a31ac2b: Pulling fs layer
+pull exit=1
+
+--- [2] fallback: pull via explicit mirror host then retag ---
+latest: Pulling from oceanbase/miniob
+4f4fb700ef54: Pulling fs layer
+9bece6cea27a: Pulling fs layer
+701aa8785399: Pulling fs layer
+254cd897500f: Pulling fs layer
+e31a617c08b4: Pulling fs layer
+bab78a31ac2b: Pulling fs layer
+716c177c92d9: Pulling fs layer
+Digest: sha256:8e4b03ae24f7f9ab783ad9190186a320ee8b5f20cf32fb9d92dfd2901c085740
+Status: Downloaded newer image for docker.m.daocloud.io/oceanbase/miniob:latest
+docker.m.daocloud.io/oceanbase/miniob:latest
+pull via host exit=0
+tag exit=0
+
+--- images ---
+IMAGE                                          ID             DISK USAGE   CONTENT SIZE   EXTRA
+docker.m.daocloud.io/library/ubuntu:24.04      534baea6a22c        119MB         31.7MB        
+docker.m.daocloud.io/oceanbase/miniob:latest   8e4b03ae24f7        1.5GB          387MB        
+oceanbase/miniob:latest                        8e4b03ae24f7        1.5GB          387MB        
+ubuntu:24.04                                   534baea6a22c        119MB         31.7MB        
+
+--- smoke test: toolchain inside oceanbase/miniob ---
+---
+=== pull-miniob done 2026-10-17T00:59:52 ===

@@ -1,0 +1,46 @@
+# ============================================================
+#  数据库系统实验 —— 第一次实验（实验一）
+#  .gitignore
+# ============================================================
+
+# ---- 构建产物（首次全量编译约 48 分钟，可随时重新生成）----
+miniob/build
+miniob/build_*/
+miniob/cmake-build-*/
+miniob/compile_commands.json
+
+# ---- 第三方子模块 ----
+# deps/3rd 下 5 个库各自是独立的 git 仓库（libevent / jsoncpp /
+# googletest / benchmark / replxx），由 miniob/.gitmodules 声明。
+# 内容不纳入本仓库，需要时用 build.sh init 拉取。
+miniob/deps/3rd/
+
+# ---- observer 运行时生成的数据目录 ----
+# MiniOB 的数据目录是「当前工作目录下的 miniob」，在仓库根启动
+# observer 就会生成 miniob/miniob/，不应提交。
+miniob/miniob/
+miniob/**/miniob/db/
+miniob/observer.log*
+miniob/.miniob.history
+
+# ---- 体积过大的离线安装包（可重新下载）----
+# DockerDesktopInstaller.exe 约 607 MB，超过 GitHub 单文件 100 MB 上限
+_setup/downloads/
+_setup/_vsix/
+*.exe
+*.vsix
+
+# ---- 临时文件与生成物 ----
+_tmp/miniob_git_backup/
+_tmp/__pycache__/
+_tmp/*.log
+_tmp/report_text.txt
+_tmp/guide.txt
+_tmp/probe.cmd
+_tmp/remote_probe.log
+
+# ---- 系统与编辑器 ----
+~$*
+Thumbs.db
+desktop.ini
+.DS_Store

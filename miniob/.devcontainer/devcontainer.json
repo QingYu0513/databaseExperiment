@@ -1,0 +1,32 @@
+{
+  // MiniOB 官方镜像：Ubuntu 24.04 + gcc/g++ + cmake + gdb + flex + bison + 常用工具
+  // 本机 Docker Hub 不可达，该镜像已通过 daocloud 镜像源预拉取并重打成此名字
+  // （见 _setup\stage3-docker-mirror-and-clone.ps1）
+  "name": "MiniOB 开发环境",
+  "image": "oceanbase/miniob",
+
+  // 容器内以 root 运行（镜像默认即 root，编译要往 /usr/local 装依赖）
+  "remoteUser": "root",
+
+  // 挂载进来的 Windows 目录属主和容器内 root 不一致时，git 会以
+  // "detected dubious ownership" 拒绝操作。而 build.sh init 里
+  // `git submodule update --init || return` 一旦失败就会**静默跳过所有依赖编译**，
+  // 后面 build.sh 必然报错且很难查。所以这里提前把 git 的信任目录放开。
+  "postCreateCommand": "git config --global --add safe.directory '*' || true",
+
+  // 这些扩展会自动安装到"容器内"，用于代码补全和调试
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.makefile-tools"
+      ],
+      "settings": {
+        "cmake.sourceDirectory": "${containerWorkspaceFolder}",
+        "C_Cpp.default.cppStandard": "c++20"
+      }
+    }
+  }
+}
