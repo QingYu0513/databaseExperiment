@@ -19,6 +19,7 @@ See the Mulan PSL v2 for more details. */
 #include "common/lang/sstream.h"
 #include "common/lang/string.h"
 #include "common/log/log.h"
+#include "common/type/date_type.h"
 
 Value::Value(int val) { set_int(val); }
 
@@ -128,6 +129,11 @@ void Value::set_data(char *data, int length)
       value_.bool_value_ = *(int *)data != 0;
       length_            = length;
     } break;
+    case AttrType::DATES: {
+      // 日期内部就是 YYYYMMDD 的 int32，和 INTS 一样按 4 字节拷贝
+      value_.int_value_ = *(int *)data;
+      length_           = length;
+    } break;
     default: {
       LOG_WARN("unknown data type: %d", attr_type_);
     } break;
@@ -155,6 +161,14 @@ void Value::set_boolean(bool val)
   attr_type_         = AttrType::BOOLEANS;
   value_.bool_value_ = val;
   length_            = sizeof(val);
+}
+
+void Value::set_date(int32_t val)
+{
+  reset();
+  attr_type_        = AttrType::DATES;
+  value_.int_value_ = val;
+  length_           = sizeof(val);
 }
 
 void Value::set_string(const char *s, int len /*= 0*/)
@@ -205,6 +219,9 @@ void Value::set_value(const Value &value)
     } break;
     case AttrType::BOOLEANS: {
       set_boolean(value.get_boolean());
+    } break;
+    case AttrType::DATES: {
+      set_date(value.get_date());
     } break;
     default: {
       ASSERT(false, "got an invalid value type");
@@ -267,6 +284,10 @@ int Value::get_int() const
     case AttrType::BOOLEANS: {
       return (int)(value_.bool_value_);
     }
+    case AttrType::DATES: {
+      // 日期取整数即为 YYYYMMDD
+      return value_.int_value_;
+    }
     default: {
       LOG_WARN("unknown data type. type=%d", attr_type_);
       return 0;
@@ -294,6 +315,9 @@ float Value::get_float() const
     } break;
     case AttrType::BOOLEANS: {
       return float(value_.bool_value_);
+    } break;
+    case AttrType::DATES: {
+      return float(value_.int_value_);
     } break;
     default: {
       LOG_WARN("unknown data type. type=%d", attr_type_);
@@ -342,10 +366,42 @@ bool Value::get_boolean() const
     case AttrType::BOOLEANS: {
       return value_.bool_value_;
     } break;
+    case AttrType::DATES: {
+      return value_.int_value_ != 0;
+    } break;
     default: {
       LOG_WARN("unknown data type. type=%d", attr_type_);
       return false;
     }
   }
   return false;
+}
+
+int32_t Value::get_date() const
+{
+  switch (attr_type_) {
+    case AttrType::DATES:
+    case AttrType::INTS: {
+      return value_.int_value_;
+    }
+    case AttrType::CHARS: {
+      // 字符串按 "YYYY-M-D" 解析，解析失败返回 0
+      int32_t date = 0;
+      if (nullptr != value_.pointer_value_ && DateType::parse_date(value_.pointer_value_, date)) {
+        return date;
+      }
+      return 0;
+    }
+    case AttrType::FLOATS: {
+      return (int32_t)(value_.float_value_);
+    }
+    case AttrType::BOOLEANS: {
+      return value_.bool_value_ ? 1 : 0;
+    }
+    default: {
+      LOG_WARN("unknown data type. type=%d", attr_type_);
+      return 0;
+    }
+  }
+  return 0;
 }

@@ -4,3 +4,34 @@ cd /workspaces/miniob
 任务一：
 cd /root
 /workspaces/miniob/build_debug/bin/observer -f /workspaces/miniob/etc/observer.ini -P cli -d disk
+任务三：比较删除(date_table)
+select * from date_table where u_date>'2020-1-20';
+select * from date_table where u_date<'2019-12-31';
+select * from date_table where u_date='2020-1-1';
+delete from date_table where u_date>'2012-2-29';
+select * from date_table;
+测试非法日期：
+insert into date_table values (10,'2017-2-29');
+insert into date_table values (11,'2017-21-29');
+insert into date_table values (12,'2017-12-32');
+insert into date_table values (13,'2017-11-31');
+任务四：(aggregation_func)
+select count(*) from aggregation_func;                          -- 4
+select count(num) from aggregation_func;                        -- 4
+select min(num) from aggregation_func;                          -- 12
+select min(price) from aggregation_func;                        -- 10
+select min(addr) from aggregation_func;                         -- abc
+select max(num) from aggregation_func;                          -- 18
+select max(price) from aggregation_func;                        -- 30
+select max(addr) from aggregation_func;                         -- dei
+select avg(num) from aggregation_func;                          -- 15
+select avg(price) from aggregation_func;                        -- 22.5
+select min(num),max(num),avg(num) from aggregation_func;        -- 12 / 18 / 15
+报错：
+select min(*) from aggregation_func;
+select max(*) from aggregation_func;
+select avg(*) from aggregation_func;
+select count(*,num) from aggregation_func;
+select count() from aggregation_func;
+select count(id2) from aggregation_func;
+select avg(addr) from aggregation_func;

@@ -36,6 +36,7 @@ public:
   friend class BooleanType;
   friend class CharType;
   friend class VectorType;
+  friend class DateType;
 
   Value() = default;
 
@@ -112,6 +113,8 @@ public:
   string   get_string() const;
   string_t get_string_t() const;
   bool     get_boolean() const;
+  /// @brief 获取日期值，内部表示是 YYYYMMDD 形式的整数
+  int32_t  get_date() const;
 
 public:
   void set_int(int val);
@@ -119,6 +122,8 @@ public:
   void set_string(const char *s, int len = 0);
   void set_empty_string(int len);
   void set_string_from_other(const Value &other);
+  /// @brief 设置日期值，val 为 YYYYMMDD 形式的整数
+  void set_date(int32_t val);
 
 private:
   AttrType attr_type_ = AttrType::UNDEFINED;

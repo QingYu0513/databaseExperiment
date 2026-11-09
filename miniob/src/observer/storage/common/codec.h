@@ -423,6 +423,12 @@ public:
           LOG_WARN("append failed");
         }
         break;
+      case AttrType::DATES:
+        // 日期内部是 YYYYMMDD 的整数，按 INTS 同样的方式编码即可保证有序
+        if (OB_FAIL(OrderedCode::append(dst, (int64_t)val.get_date()))) {
+          LOG_WARN("append failed");
+        }
+        break;
       case AttrType::FLOATS:
         if (OB_FAIL(OrderedCode::append(dst, (double)val.get_float()))) {
           LOG_WARN("append failed");

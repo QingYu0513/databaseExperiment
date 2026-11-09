@@ -34,7 +34,7 @@ See the Mulan PSL v2 for more details. */
  *                → 物理计划 → 算子树（TableScan→Predicate→Project）
  *                → 逐行 next() 拉取 → 填 TupleSchema → 输出结果集
  *                涉及文件：logical_plan_generator / rewriter /
- *                         physical_plan_generator / sql/operator/*.cpp
+ *                         physical_plan_generator / sql/operator 目录下的算子
  *
  *   DROP TABLE   parse → Stmt → （优化器直接放弃）→ 本函数
  *                → Db::drop_table → 改哈希表 + 删文件
